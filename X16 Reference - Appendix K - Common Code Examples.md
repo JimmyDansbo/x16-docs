@@ -143,6 +143,8 @@ semaphore:	.res	1	; Variable being updated by interrupt routine
 	beq	@vsync_end
 	; Update semaphore variable on each VSYNC interrupt
 	sta	semaphore
+	; Acknowledge VSYNC interrupt by writing 1 to VERA_ISR
+	sta	$9F27
 @vsync_end:
 	; Handle IO with custom code as kernal interrupt routine is not called
 	...
@@ -179,8 +181,53 @@ loop:
 	...
 	bra	loop
 ```
-The easiest option is to install a customer interrupt handler that simply passes control on to the internal interrupt function when it has done it's job. This way, the kernal is still handling all of the IO operations such as reading keyboard, mouse and joystick as well as updating system time etc.
+The easiest option is to install a custome interrupt handler that simply passes control on to the kernal interrupt function when it has done it's job. This way, the kernal is still handling all of the IO operations such as reading keyboard, mouse and joystick as well as updating system time etc.
 ```ASM
+IRQ_VECTOR	= $0314
+
+semaphore	.res	1	; Variable being updated by interrupt routine
+orig_isr	.res	2	; Variable to hold address of kernal interrupt routine
+
+.proc my_interrupt_routine
+	lda	$9F27			; Check if VSYNC is the source of the interrupt
+	and	#$01
+	beq	@vsync_end
+	; Update semaphore variable on each VSYNC interrupt
+	sta	semaphore
+@vsync_end:
+	; Pass control to kernal interrupt routine
+	jmp	(orig_isr)		; Kernal acknowledges VSYNC interrupt
+.endproc
+
+.proc install_custom_interrupt_routine
+	; Save kernal interrupt handler in orig_isr variable
+	lda	IRQ_VECTOR+0
+	sta	orig_isr+0
+	lda	IRQ_VECTOR+1
+	sta	orig_ISR+1
+	sei					; Disable interrupts
+	; Overwrite address of kernal interrupt routine with address
+	; of custom interrupt routine
+	lda	#<my_interrupt_routine
+	sta	IRQ_VECTOR+0
+	lda	#>my_interrupt_routine
+	sta	IRQ_VECTOR+1
+	cli					; Enable interrupts
+	rts
+.endproc
+
+main:
+	jsr	install_custom_interrupt_routine
+
+loop:
+	wai
+	lda	semaphore		; If semaphore=1, VSYNC interrupt has happened
+	bne	loop
+	; VSYNC interrupt has happened, reset semaphore variable
+	stz	semaphore
+	; Do stuff
+	...
+	bra	loop
 ```
 ## C Language
 ## Prog8
