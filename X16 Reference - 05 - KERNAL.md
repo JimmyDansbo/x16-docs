@@ -247,8 +247,8 @@ These values will need to be popped before returning from the interrupt function
 .proc my_interrrupt_function
 	...
 
-	lda     #1
-	sta     $9F27   ; Acknowledge VBLANK by writing to VERA_ISR
+	lda	#1
+	sta	$9F27	; Acknowledge VBLANK by writing to VERA_ISR
 	ply
 	plx
 	pla
@@ -270,7 +270,7 @@ values will need to be popped before returning from the NMI:
 	...
 
 	pla
-	sta $01
+	sta	$01
 	pla
 	rti
 .endproc
