@@ -245,14 +245,14 @@ Before the user IRQ function is called, the KERNAL pushes the CBM IRQ stackframe
 These values will need to be popped before returning from the interrupt function.
 ```
 .proc my_interrrupt_function
-        ...
+	...
 
-        lda     #1
-        sta     $9F27   ; Acknowledge VBLANK by writing to VERA_ISR
-        ply
-        plx
-        pla
-        rti
+	lda     #1
+	sta     $9F27   ; Acknowledge VBLANK by writing to VERA_ISR
+	ply
+	plx
+	pla
+	rti
 .endproc
 ```
 
