@@ -7,6 +7,7 @@ This is a selection of examples to give an idea on how to program different part
 
 * [Assembler](#assembler)
 	* [Startup](#startup)
+	* [Interrupt](#interrupt)
 * [C Language](#c-language)
 * [Prog8](#prog8)
 
@@ -14,9 +15,9 @@ This is a selection of examples to give an idea on how to program different part
 ### Startup
 Some assemblers, like the [ACME Cross-Assembler](https://sourceforge.net/projects/acme-crossass/) do not automatically provide a BASIC stub for starting the program. That means it is up to the programmer to create that stop, enabling the user to start the program by typing `RUN` after loading it.  
 This is an example for ACME assembler on how to create the BASIC stub.
-```assembler
+```ASM
 *=$0801						; BASIC programs start at $0801
-!word	last_line			; Pointer to next/last line of BASIC code
+!word	@last_line			; Pointer to next/last line of BASIC code
 !word	$000A				; Line number $000A = 10
 !byte	$9E					; BASIC token for SYS command
 !byte	$30+(main/1000)%10	; Address of main function of program
@@ -24,12 +25,18 @@ This is an example for ACME assembler on how to create the BASIC stub.
 !byte	$30+(main/10)%10
 !byte	$30+(main/1)%10
 !byte	$00					; End of BASIC line
-last_line:
+@last_line:
 !word	$0000				; End of BASIC program
 ; Above creates a BASIC program that looks like this:
 ; 10 SYS 2061
+; 2061 is the same as $080D which is where the main label is currently placed
+
 main:
 	rts
+```
+### Interrupt
+
+```
 ```
 ## C Language
 ## Prog8
