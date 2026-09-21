@@ -14,11 +14,11 @@ This is a selection of examples to give an idea on how to program different part
 
 ## Assembler
 ### Startup
-Some assemblers, like the [ACME Cross-Assembler](https://sourceforge.net/projects/acme-crossass/) do not automatically provide a BASIC stub for starting the program. That means it is up to the programmer to create that stop, enabling the user to start the program by typing `RUN` after loading it.  
+Some assemblers, like the [ACME Cross-Assembler](https://sourceforge.net/projects/acme-crossass/) do not automatically provide a BASIC stub for starting the program. That means it is up to the programmer to create that stub, enabling the user to start the program by typing `RUN` after loading it.  
 This is an example for ACME assembler on how to create the BASIC stub.
 ```ASM
 *=$0801						; BASIC programs start at $0801
-!word	@last_line			; Pointer to next/last line of BASIC code
+!word	@last_line			; Pointer to next BASIC line
 !word	$000A				; Line number $000A = 10
 !byte	$9E					; BASIC token for SYS command
 !byte	$30+(main/1000)%10	; Address of main function of program
@@ -181,7 +181,7 @@ loop:
 	...
 	bra	loop
 ```
-The easiest option is to install a custome interrupt handler that simply passes control on to the kernal interrupt function when it has done it's job. This way, the kernal is still handling all of the IO operations such as reading keyboard, mouse and joystick as well as updating system time etc.
+The easiest option is to install a custom interrupt handler that simply passes control on to the kernal interrupt function when it has done it's job. This way, the kernal is still handling all of the IO operations such as reading keyboard, mouse and joystick as well as updating system time etc.
 ```ASM
 IRQ_VECTOR	= $0314
 
