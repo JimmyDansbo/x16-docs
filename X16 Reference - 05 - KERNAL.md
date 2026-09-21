@@ -244,7 +244,7 @@ If the IRQ vector is replaced with a user function and that function does not ca
 Before the user IRQ function is called, the KERNAL pushes the CBM IRQ stackframe onto the stack. The CBM IRQ stackframe consists of registers `a`, `x` & `y` in that order.  
 These values will need to be popped before returning from the interrupt function.
 ```
-.proc my_interrrupt_function
+.proc my_tight_interrrupt_function
 	...
 
 	lda	#1
@@ -253,6 +253,14 @@ These values will need to be popped before returning from the interrupt function
 	plx
 	pla
 	rti
+.endproc
+```
+For many custom interrupt handlers, it will be sufficient to simply call the original IRQ routine and let the kernal handle IO communication, acknowledging interrupt and restoring registers.
+```
+.proc my_interrupt_function
+	...
+
+	jmp	(kernal_isr)	; kernal_isr should hold the address previously at $0314
 .endproc
 ```
 
