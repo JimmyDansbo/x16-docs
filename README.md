@@ -51,6 +51,7 @@ first.
 * [Appendix H: Onboard Upgrade Guide](X16%20Reference%20-%20Appendix%20H%20-%20Onboard%20Upgrade%20Guide.md#appendix-h-how-to-update-your-x16-to-latest-release)
 * [Appendix I: Character Sets](X16%20Reference%20-%20Appendix%20I%20-%20Character%20Sets.md#appendix-i-character-sets)
 * [Appendix J: ROM Recovery](X16%20Reference%20-%20Appendix%20J%20-%20ROM%20Recovery.md#appendix-j-rom-recovery)
+* [Appendix K: Common Code Examples](X16%20Reference%20-%20Appendix%20J%20-%20Common%20Code%20Examples.md#appendix-k-common-code-examples)
 
 ## External Links
 
